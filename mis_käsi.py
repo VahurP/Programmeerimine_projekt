@@ -1,11 +1,22 @@
 #mõte, et kasutaja sisestab lihtsalt mis käsi tal on preflop ning siis tagastatakse kui suurest hulgast kätest ta käsi parem on.
 mastide_sõnastik = {
     "risti" : "\u2663",
+    "clubs" : "\u2663",
+    "c" : "\u2663",
+    "ri" : "\u2663",
     "ärtu" : "\u2665",
+    "hearts" : "\u2665",
+    "h" : "\u2665",
+    "är" : "\u2665",
     "ruutu" : "\u2666",
+    "diamonds" : "\u2666",
+    "d" : "\u2666",
+    "ru" : "\u2666",
     "poti" : "\u2660",
+    "spades" : "\u2660",
+    "s" : "\u2660",
+    "po" : "\u2660",
 }
-
 kaartide_väärtused = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
 kaardid = ['2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♣', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♥', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♦', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠', 'A♠']
@@ -53,3 +64,4 @@ def mast(laua_järjend):
 käsi = ["Ax","Ax","2x","9x","8x","6z","7u"]
 print(mitmik_maja(käsi))
 print(mast(käsi))
+
