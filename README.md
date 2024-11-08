@@ -1,3 +1,4 @@
 # Programmeerimine_projekt
-1. kursuse programmeerimise projekt.
+Esimese kursuse programmeerimise projekt.
+</br>
 Autorid: Vahur ja Tristan
