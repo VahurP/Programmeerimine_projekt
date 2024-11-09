@@ -63,7 +63,7 @@ def mitmik_maja(laua_järjend): #paar, kaks paari kolmiku ja neliku funktsioon (
         if tagastus.count("kolmik") >= 2:
             return "maja"
         return "kolmik"
-    return False
+    return "Kõrge"
 
 
 def mast(laua_järjend):
@@ -91,5 +91,23 @@ def rida(laua_järjend):
     return False
 
 
-käsi = ["Kx","Qx","10x","Jx","9x","4z","5u"]
-print(rida(käsi))
+def main(): #põhiprogramm mis võtab kõik kokku ning väljastab (ja ka tagastab) mis käsi on
+    käsi = input("Sisesta käsi: ")
+    käsi = käsi.split()
+    if mitmik_maja(käsi) in ["maja", "nelik"]:
+        print(mitmik_maja(käsi))
+        return mitmik_maja(käsi)
+    if mast(käsi) == "mast":
+        print("mast")
+        return "mast"
+    if rida(käsi) == "rida":
+        print("rida")
+        return "rida"
+    else:
+        print(mitmik_maja(käsi))
+        return mitmik_maja(käsi)
+
+
+if __name__ == "__main__": #lihtsalt proovimiseks tehtud - saab mistahes käe sisse panna kujul 2x 7y 3x Kx Ax 5y Jz ning tagastab mis väärtus on
+    while True:
+        main()
