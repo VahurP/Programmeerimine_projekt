@@ -26,7 +26,7 @@ kaardid = ['2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10�
 
 def kaartide_järjestus(kaart):
     järjestus = {"A":13, "K":12, "Q":11, "J":10, "10":9, "9":8, "8":7, "7":6, "6":5, "5":4, "4":3, "3":2, "2":1}
-    return järjestus[kaart]
+    return järjestus[kaart[:-1]]
 
 
 def hand_ranking(käsi): #erineva tugevusega käte võrdlemiseks
@@ -91,23 +91,48 @@ def rida(laua_järjend):
     return False
 
 
-def main(): #põhiprogramm mis võtab kõik kokku ning väljastab (ja ka tagastab) mis käsi on
-    käsi = input("Sisesta käsi: ")
-    käsi = käsi.split()
+def mis_käsi(käsi): #põhiprogramm mis võtab kõik kokku ning väljastab (ja ka tagastab) mis käsi on
     if mitmik_maja(käsi) in ["maja", "nelik"]:
-        print(mitmik_maja(käsi))
         return mitmik_maja(käsi)
     if mast(käsi) == "mast":
-        print("mast")
         return "mast"
     if rida(käsi) == "rida":
-        print("rida")
         return "rida"
     else:
-        print(mitmik_maja(käsi))
         return mitmik_maja(käsi)
 
+def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
+    viisik = []
+    käsi = sorted(käsi, key=kaartide_järjestus, reverse=True)
+    if mis_käsi(käsi) == "mast":
+        mastid = [käsi[i][-1] for i in range(7)]
+        for el in mastid:
+            if mastid.count(el) >= 5:
+                mast = el
+                break
+        for el in käsi:
+            if el[-1] == mast:
+                viisik.append(el)
+                if len(viisik) == 5:
+                    return viisik
+    käsi1 = [käsi[i][0] for i in range(7)]
+    if mis_käsi(käsi) == "maja":
+        c = 0
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 3 and c == 0:
+                viisik.append(käsi[i])
+                if len(viisik) == 3:
+                    c = 1
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 2:
+                viisik.append(käsi[i])
+                if len(viisik) == 5:
+                    return viisik
+    if mis_käsi(käsi) == "nelik":
+        käsi = [käsi[i][0] for i in range(7)]
+        for el in käsi:
+            c = 0
 
-if __name__ == "__main__": #lihtsalt proovimiseks tehtud - saab mistahes käe sisse panna kujul 2x 7y 3x Kx Ax 5y Jz ning tagastab mis väärtus on
-    while True:
-        main()
+
+print(viis_kaarti(["Aa", "Aa", "Ja", "Aa", "10k", "6a", "Qb"]))
+print(mis_käsi(["Aa", "Aa", "Ja", "Aa", "10k", "6a", "Qb"]))
