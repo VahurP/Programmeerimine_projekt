@@ -75,23 +75,23 @@ def mast(laua_järjend):
 
 
 def rida(laua_järjend):
-    laua_väärtused = [laua_järjend[i][:-1] for i in range(7)]
-    laua_väärtused = sorted(laua_väärtused, key=kaartide_järjestus)
-    luger = 0
+    laua_väärtused = sorted(laua_järjend, key=kaartide_järjestus)
+    laua_väärtused = [laua_väärtused[i][:-1] for i in range(7)]
     if "A" in laua_väärtused and "2" in laua_väärtused and "3" in laua_väärtused and "4" in laua_väärtused and "5" in laua_väärtused:
-        print("AAA")
         return "rida"
-    for i in range(6):
-        if kaartide_väärtused_sõnastik[laua_väärtused[i+1]]-kaartide_väärtused_sõnastik[laua_väärtused[i]] == 1:
-            luger += 1
-            if luger == 4:
-                return "rida"
-        else:
-            luger = 0
+    for j in range(3):
+        luger = 0
+        for i in range(4):
+            if kaartide_väärtused_sõnastik[laua_väärtused[i+j+1]]-kaartide_väärtused_sõnastik[laua_väärtused[i+j]] == 1:
+                luger += 1
+                if luger == 4:
+                    return "rida"
+            else:
+                luger = 0
     return False
 
 
-def mis_käsi(käsi): #põhiprogramm mis võtab kõik kokku ning väljastab (ja ka tagastab) mis käsi on
+def mis_käsi(käsi): #põhiprogramm mis võtab kõik kokku ning tagastab mis käsi on
     if mitmik_maja(käsi) in ["maja", "nelik"]:
         return mitmik_maja(käsi)
     if mast(käsi) == "mast":
@@ -104,6 +104,7 @@ def mis_käsi(käsi): #põhiprogramm mis võtab kõik kokku ning väljastab (ja 
 def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
     viisik = []
     käsi = sorted(käsi, key=kaartide_järjestus, reverse=True)
+    käsi1 = [käsi[i][:-1] for i in range(7)]
     if mis_käsi(käsi) == "mast":
         mastid = [käsi[i][-1] for i in range(7)]
         for el in mastid:
@@ -115,7 +116,6 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
                 viisik.append(el)
                 if len(viisik) == 5:
                     return viisik
-    käsi1 = [käsi[i][0] for i in range(7)]
     if mis_käsi(käsi) == "maja":
         c = 0
         for i in range(7):
@@ -129,10 +129,48 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
                 if len(viisik) == 5:
                     return viisik
     if mis_käsi(käsi) == "nelik":
-        käsi = [käsi[i][0] for i in range(7)]
-        for el in käsi:
-            c = 0
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 4:
+                viisik.append(käsi[i])
+        for i in range(7):
+            if käsi1.count(käsi1[i]) != 4:
+                viisik.append(käsi[i])
+                return viisik
+    if mis_käsi(käsi) == "rida":
+        for i in range(3):
+            luger = 0
+            viisik = [käsi[i]]
+            for j in range(4):
+                if kaartide_väärtused_sõnastik[käsi1[i + j]] - kaartide_väärtused_sõnastik[käsi1[i + j + 1]] == 1:
+                    viisik.append(käsi[i + j + 1])
+                    luger += 1
+                    if luger == 4:
+                        return viisik
+    if mis_käsi(käsi) == "kolmik":
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 3:
+                viisik.append(käsi[i])
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 1:
+                viisik.append(käsi[i])
+                if len(viisik) == 5:
+                    return viisik
+    if mis_käsi(käsi) == "paar" or mis_käsi(käsi) == "kaks paari":
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 2:
+                viisik.append(käsi[i])
+                if len(viisik) == 4:
+                    break
+        for i in range(7):
+            if käsi1.count(käsi1[i]) == 1:
+                viisik.append(käsi[i])
+                if len(viisik) == 5:
+                    return viisik
+    else:
+        return [käsi[i] for i in range(5)]
 
 
-print(viis_kaarti(["Aa", "Aa", "Ja", "Aa", "10k", "6a", "Qb"]))
-print(mis_käsi(["Aa", "Aa", "Ja", "Aa", "10k", "6a", "Qb"]))
+
+sisend = ["Aa", "8a", "Qa", "Ja", "2k", "6b", "9b"]
+print(viis_kaarti(sisend))
+
