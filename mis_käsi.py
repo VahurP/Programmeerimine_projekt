@@ -136,7 +136,7 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
             if käsi1.count(käsi1[i]) != 4:
                 viisik.append(käsi[i])
                 return viisik
-    if mis_käsi(käsi) == "rida":
+    if mis_käsi(käsi) == "rida": #siia tuleb lisada veel A 2 3 4 5 rida
         for i in range(3):
             luger = 0
             viisik = [käsi[i]]
@@ -171,6 +171,5 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
 
 
 
-sisend = ["Aa", "8a", "Qa", "Ja", "2k", "6b", "9b"]
+sisend = ["Aa", "2a", "Qa", "8a", "4k", "Kb", "9b"]
 print(viis_kaarti(sisend))
-
