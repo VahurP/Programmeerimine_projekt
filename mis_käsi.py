@@ -209,7 +209,7 @@ def main():
         kaardid1 = kaardid.copy()
         kaardid1.remove(kaart1)
         kaardid1.remove(kaart2)
-        for k in range(10000):
+        for k in range(100): #saab muuta kui täpset väljundit tahame (jooksutatakse k simulatsiooni)
             seitse = sample(kaardid1,7)
             laud = sample(seitse, 5)
             laud.append(kaart1)
