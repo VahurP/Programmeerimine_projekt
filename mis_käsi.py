@@ -1,8 +1,6 @@
 #mõte, et kasutaja sisestab lihtsalt mis käsi tal on preflop ning siis tagastatakse kui
 #suurest hulgast kätest ta käsi parem on.
-from collections import OrderedDict
 import datetime
-import numpy as np
 from random import sample
 algus = datetime.datetime.now()
 mastide_sõnastik = {
@@ -119,7 +117,8 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
     viisik = []
     käsi = sorted(käsi, key=kaartide_järjestus, reverse=True)
     käsi1 = [käsi[i][:-1] for i in range(7)]
-    if mis_käsi(käsi) == "mast":
+    väärtus = mis_käsi(käsi)
+    if väärtus == "mast":
         mastid = [käsi[i][-1] for i in range(7)]
         for el in mastid:
             if mastid.count(el) >= 5:
@@ -130,7 +129,7 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
                 viisik.append(el)
                 if len(viisik) == 5:
                     return viisik
-    if mis_käsi(käsi) == "maja":
+    if väärtus == "maja":
         c = 0
         for i in range(7):
             if käsi1.count(käsi1[i]) == 3 and c == 0:
@@ -142,7 +141,7 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
                 viisik.append(käsi[i])
                 if len(viisik) == 5:
                     return viisik
-    if mis_käsi(käsi) == "nelik":
+    if väärtus == "nelik":
         for i in range(7):
             if käsi1.count(käsi1[i]) == 4:
                 viisik.append(käsi[i])
@@ -150,7 +149,14 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
             if käsi1.count(käsi1[i]) != 4:
                 viisik.append(käsi[i])
                 return viisik
-    if mis_käsi(käsi) == "rida": #siia tuleb lisada veel A 2 3 4 5 rida
+    if väärtus == "rida":
+        if "A" in käsi1 and "2" in käsi1 and "3" in käsi1 and "4" in käsi1 and "5" in käsi1:
+            viisik.append(käsi[käsi1.index("5")])
+            viisik.append(käsi[käsi1.index("4")])
+            viisik.append(käsi[käsi1.index("3")])
+            viisik.append(käsi[käsi1.index("2")])
+            viisik.append(käsi[käsi1.index("A")])
+            return viisik
         for i in range(3):
             luger = 0
             viisik = [käsi[i]]
@@ -160,7 +166,7 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
                     luger += 1
                     if luger == 4:
                         return viisik
-    if mis_käsi(käsi) == "kolmik":
+    if väärtus == "kolmik":
         for i in range(7):
             if käsi1.count(käsi1[i]) == 3:
                 viisik.append(käsi[i])
@@ -169,7 +175,7 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
                 viisik.append(käsi[i])
                 if len(viisik) == 5:
                     return viisik
-    if mis_käsi(käsi) == "paar" or mis_käsi(käsi) == "kaks paari":
+    if väärtus == "paar" or väärtus == "kaks paari":
         for i in range(7):
             if käsi1.count(käsi1[i]) == 2:
                 viisik.append(käsi[i])
@@ -209,19 +215,23 @@ def main():
         kaardid1 = kaardid.copy()
         kaardid1.remove(kaart1)
         kaardid1.remove(kaart2)
-        for k in range(100): #saab muuta kui täpset väljundit tahame (jooksutatakse k simulatsiooni)
+        for k in range(500000):
             seitse = sample(kaardid1,7)
             laud = sample(seitse, 5)
             laud.append(kaart1)
             laud.append(kaart2)
-            if kumb_võidab(laud, seitse) == "Esimene":
+            tulemus = kumb_võidab(laud, seitse)
+            if tulemus == "Esimene":
                 luger += 1
-            if kumb_võidab(laud, seitse) == "Viik":
+            elif tulemus == "Viik":
                 luger += 0.5
+
         väljund[kaardipaar[i]] = luger
     sorteeritud_väljund = dict(sorted(väljund.items(), key=lambda item: item[1], reverse=True))
     print(sorteeritud_väljund)
     return(sorteeritud_väljund)
+
+
 
 if __name__ == "__main__":
     main()
