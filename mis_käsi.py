@@ -1,5 +1,10 @@
 #mõte, et kasutaja sisestab lihtsalt mis käsi tal on preflop ning siis tagastatakse kui
 #suurest hulgast kätest ta käsi parem on.
+from collections import OrderedDict
+import datetime
+import numpy as np
+from random import sample
+algus = datetime.datetime.now()
 mastide_sõnastik = {
     "risti" : "\u2663",
     "clubs" : "\u2663",
@@ -24,13 +29,22 @@ kaartide_väärtused_sõnastik = {'2':1, '3':2, '4':3, '5':4, '6':5, '7':6, '8':
 
 kaardid = ['2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♣', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♥', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♦', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠', 'A♠']
 
+kaardipaar = [] #loome sellise faili kus on minimaalne arv kaardipaare, et programm lõpus jookseks kordades kiiremini
+kaardid_risti = kaardid[:13]
+kaardid_ärtu = kaardid[13:26]
+for i in range(13):
+    for j in range(i,13):
+        kaardipaar.append(kaardid_risti[i] + " " + kaardid_ärtu[j])
+for i in range(12):
+    for j in range(i+1,13):
+        kaardipaar.append(kaardid_ärtu[i] + " " + kaardid_ärtu[j])
 def kaartide_järjestus(kaart):
     järjestus = {"A":13, "K":12, "Q":11, "J":10, "10":9, "9":8, "8":7, "7":6, "6":5, "5":4, "4":3, "3":2, "2":1}
     return järjestus[kaart[:-1]]
 
 
 def hand_ranking(käsi): #erineva tugevusega käte võrdlemiseks
-    käed = ["kõrge", "paar", "kaks paari", "kolmik", "rida", "mast", "maja", "mastirida", "kuninglik mastirida"]
+    käed = ["kõrge", "paar", "kaks paari", "kolmik", "rida", "mast", "maja","nelik", "mastirida", "kuninglik mastirida"]
     return käed.index(käsi)
 
 
@@ -63,7 +77,7 @@ def mitmik_maja(laua_järjend): #paar, kaks paari kolmiku ja neliku funktsioon (
         if tagastus.count("kolmik") >= 2:
             return "maja"
         return "kolmik"
-    return "Kõrge"
+    return "kõrge"
 
 
 def mast(laua_järjend):
@@ -170,6 +184,46 @@ def viis_kaarti(käsi): #programm mis tagastab viis kaarti millest käsi koosneb
         return [käsi[i] for i in range(5)]
 
 
+def kumb_võidab(kaardid1, kaardid2): #funktsioon mis võtab sisendiks kaks kätt ning tagastab kas "Esimene", "Teine" või "Viik" vastavalt kaartidevahelisele rankingule
+    if mis_käsi(kaardid1) != mis_käsi(kaardid2):
+        if hand_ranking(mis_käsi(kaardid1)) > hand_ranking(mis_käsi(kaardid2)):
+            return "Esimene"
+        else:
+            return "Teine"
+    else:
+        for i in range(5):
+            if kaartide_järjestus(viis_kaarti(kaardid1)[i]) > kaartide_järjestus(viis_kaarti(kaardid2)[i]):
+                return "Esimene"
+        for i in range(5):
+            if kaartide_järjestus(viis_kaarti(kaardid1)[i]) < kaartide_järjestus(viis_kaarti(kaardid2)[i]):
+                return "Teine"
+    return "Viik"
 
-sisend = ["Aa", "2a", "Qa", "8a", "4k", "Kb", "9b"]
-print(viis_kaarti(sisend))
+def main():
+    väljund = {}
+    for i in range(len(kaardipaar)):
+        luger = 0
+        järjend = kaardipaar[i].split()
+        kaart1 = järjend[0]
+        kaart2 = järjend[1]
+        kaardid1 = kaardid.copy()
+        kaardid1.remove(kaart1)
+        kaardid1.remove(kaart2)
+        for k in range(10000):
+            seitse = sample(kaardid1,7)
+            laud = sample(seitse, 5)
+            laud.append(kaart1)
+            laud.append(kaart2)
+            if kumb_võidab(laud, seitse) == "Esimene":
+                luger += 1
+            if kumb_võidab(laud, seitse) == "Viik":
+                luger += 0.5
+        väljund[kaardipaar[i]] = luger
+    sorteeritud_väljund = dict(sorted(väljund.items(), key=lambda item: item[1], reverse=True))
+    print(sorteeritud_väljund)
+    return(sorteeritud_väljund)
+
+if __name__ == "__main__":
+    main()
+print(datetime.datetime.now()-algus)
+
