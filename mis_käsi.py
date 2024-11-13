@@ -1,33 +1,26 @@
-#mõte, et kasutaja sisestab lihtsalt mis käsi tal on preflop ning siis tagastatakse kui
-#suurest hulgast kätest ta käsi parem on.
+################################################
+# Programmeerimine I
+# 2024/2025 sügissemester
+#
+# Projekt
+# Teema: Pokkerimängu abivahend
+#
+#
+# Autorid:Vahur paist, (Tristan Imala)
+#
+#
+##################################################
 import datetime
 from random import sample
 algus = datetime.datetime.now()
-mastide_sõnastik = {
-    "risti" : "\u2663",
-    "clubs" : "\u2663",
-    "c" : "\u2663",
-    "ri" : "\u2663",
-    "ärtu" : "\u2665",
-    "hearts" : "\u2665",
-    "h" : "\u2665",
-    "är" : "\u2665",
-    "ruutu" : "\u2666",
-    "diamonds" : "\u2666",
-    "d" : "\u2666",
-    "ru" : "\u2666",
-    "poti" : "\u2660",
-    "spades" : "\u2660",
-    "s" : "\u2660",
-    "po" : "\u2660",
-}
+
 kaartide_väärtused = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
 kaartide_väärtused_sõnastik = {'2':1, '3':2, '4':3, '5':4, '6':5, '7':6, '8':7, '9':8, '10':9, 'J':10, 'Q':11, 'K':12, 'A':13}
 
 kaardid = ['2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♣', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♥', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♦', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠', 'A♠']
 
-kaardipaar = [] #loome sellise faili kus on minimaalne arv kaardipaare, et programm lõpus jookseks kordades kiiremini
+kaardipaar = [] #loome sellise faili kus on minimaalne arv kaardipaare, et programm lõpus jookseks kordades kiiremini (pole mõtet eraldi vaadelda näiteks käte 7♣8♥ ja 7♦8♥ tugevusi kui nad on täiesti sümmetrilised igat moodi (nii saame sisendite arvu ca 1300 pealt 169-le)
 kaardid_risti = kaardid[:13]
 kaardid_ärtu = kaardid[13:26]
 for i in range(13):
