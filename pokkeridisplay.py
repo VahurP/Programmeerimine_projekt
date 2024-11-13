@@ -1,4 +1,16 @@
 import pygame
+################################################
+# Programmeerimine I
+# 2024/2025 sügissemester
+#
+# Projekt
+# Teema: Pokkerimängu abivahend
+#
+#
+# Autorid:(Vahur paist), Tristan Imala
+#
+#
+##################################################
 pygame.init()
 # Setting game window dimensions
 laius = 1200
