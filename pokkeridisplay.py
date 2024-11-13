@@ -1,4 +1,4 @@
-import pygame
+
 ################################################
 # Programmeerimine I
 # 2024/2025 sügissemester
@@ -11,12 +11,13 @@ import pygame
 #
 #
 ##################################################
+import pygame
 pygame.init()
-# Setting game window dimensions
+# Ekraani suurus
 laius = 1200
 kõrgus = 650
 game_display = pygame.display.set_mode((laius, kõrgus))
-# Loading the image
+# Laeb taustapildi
 taustapilt = pygame.image.load('tasut.jpg')
 taustapilt = pygame.transform.scale(taustapilt, (laius, kõrgus))
 #Taust kirjale
@@ -44,11 +45,13 @@ font = pygame.font.Font(None, 30)
 timer = pygame.time.Clock()
 laius = game_display.get_width()
 kõrgus = game_display.get_width()
-
+# Määrab igale kaardile arvu
 def kaartide_järjestus(kaart):
     järjestus = {"A":13, "K":12, "Q":11, "J":10, "10":9, "9":8, "8":7, "7":6, "6":5, "5":4, "4":3, "3":2, "2":1}
     return järjestus[kaart]
+#Tühi väärtus sisend1, mida tuleb hilje mkasutada
 sisend1 = 'n'
+#Defineerib objwektide alguskohad, millisena nad näevad välja programmi avades ning pärast restart nuppu otsib sellest funktsioonist üles väärtused
 def algus():
     #Ruutuässa info
     global ruutuäss, object_x_ruutuäss, object_y_ruutuäss, object_size_ruutuäss
@@ -124,13 +127,14 @@ def algus():
 algus()
 
 mitmes = 0 #See aitab programmil meelde jätta, mitmes kaart on valitud, et ta viiks ta õigele kohta ja ei stakiks kõiki üksteise otsa
-# Main game loop
+# Mängu loop
 running = True
 while running:
     kaardi_koht_vajutades = 900 + mitmes*100, 10 #Arvutab välja kaardi kordinaadi paremal poolel
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        #Kui hiirega klõpsata mingile kohale
         if event.type == pygame.MOUSEBUTTONDOWN:
             if mitmes < 2:
                 if object_x_ruutuäss <= mouse[0] <= object_x_ruutuäss + object_size_ruutuäss[0] and object_y_ruutuäss <= mouse[1] <= object_y_ruutuäss + object_size_ruutuäss[1] and object_x_ruutuäss < 670:
@@ -260,7 +264,7 @@ while running:
                 object_x_tekst2, object_y_tekst2 = 300, 400
                 
     mouse = pygame.mouse.get_pos()
-    # Drawing image at position (0,0)
+    # Pärast iga tsükklit updateib asukohta
     game_display.blit(taustapilt, (0, 0))
     game_display.blit(taust_kirjale, (object_x_taust_kirjale, object_y_taust_kirjale, * object_size_taust_kirjale))
     game_display.blit(ruutuäss, (object_x_ruutuäss, object_y_ruutuäss, * object_size_ruutuäss))
