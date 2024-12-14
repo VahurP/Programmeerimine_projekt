@@ -227,13 +227,13 @@ def preflop():
     return(sorteeritud_väljund)
 
 #Eestikeelesetes sõnastikes uurides leidsin, et kõige sagedasemani kasutatakse eestikeeles ingliskeerlseid väljendeid preflop, flop, turn, river (sellest inspireeritune ka nimed funktsioonidele)
-def flop():
+def flop(a, b, c, d, e):
     luger = 0
-    kaart1 = kaardid[25] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
-    kaart2 = kaardid[0]
-    flop1 = kaardid[3]
-    flop2 = kaardid[32]
-    flop3 = kaardid[21]
+    kaart1 = kaardid[a] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
+    kaart2 = kaardid[b]
+    flop1 = kaardid[c]
+    flop2 = kaardid[d]
+    flop3 = kaardid[e]
     print(kaart1, kaart2, flop1, flop2, flop3)
     kaardid1 = kaardid.copy()
     kaardid1.remove(kaart1)
@@ -253,14 +253,14 @@ def flop():
             luger += 0.5
     return luger
 
-def turn():
+def turn(a, b, c, d, e, f):
     luger = 0
-    kaart1 = kaardid[25] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
-    kaart2 = kaardid[0]
-    flop1 = kaardid[3]
-    flop2 = kaardid[32]
-    flop3 = kaardid[21]
-    turn = kaardid[40]
+    kaart1 = kaardid[a] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
+    kaart2 = kaardid[b]
+    flop1 = kaardid[c]
+    flop2 = kaardid[d]
+    flop3 = kaardid[e]
+    turn = kaardid[f]
     print(kaart1, kaart2, flop1, flop2, flop3, turn)
     kaardid1 = kaardid.copy()
     kaardid1.remove(kaart1)
@@ -282,15 +282,15 @@ def turn():
     return luger
 
 
-def river():
+def river(a, b, c, d, e, f, g):
     luger = 0
-    kaart1 = kaardid[29] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
-    kaart2 = kaardid[16]
-    flop1 = kaardid[3]
-    flop2 = kaardid[32]
-    flop3 = kaardid[21]
-    turn = kaardid[40]
-    river = kaardid[5]
+    kaart1 = kaardid[a] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
+    kaart2 = kaardid[b]
+    flop1 = kaardid[c]
+    flop2 = kaardid[d]
+    flop3 = kaardid[e]
+    turn = kaardid[f]
+    river = kaardid[g]
     print(kaart1, kaart2, flop1, flop2, flop3, turn, river)
     kaardid1 = kaardid.copy()
     kaardid1.remove(kaart1)
@@ -311,6 +311,6 @@ def river():
             luger += 0.5
     return luger
 if __name__ == "__main__":
-    print(river())
+    print(river(1, 2, 3, 4, 5, 6, 7))
 
 print(datetime.datetime.now()-algus)
