@@ -8,6 +8,8 @@ laius = 1200
 kõrgus = 650
 mäng = pygame.display.set_mode((laius, kõrgus))
 
+must = (0, 0, 0)
+
 # Laeb taustapildi
 taustapilt = pygame.image.load('taustapilt.png')
 taustapilt = pygame.transform.scale(taustapilt, (laius, kõrgus))
@@ -34,7 +36,7 @@ objekt_suurus_arvutanupp = (200, 150)
 objekt_x_arvutanupp, objekt_y_arvutanupp = 300, 500
 arvutanupp = pygame.transform.scale(arvutanupp, (objekt_suurus_arvutanupp))
 
-#Millist font programm kasutab
+#Millist fonti programm kasutab
 font = pygame.font.Font(None, 30)
 laius = mäng.get_width()
 kõrgus = mäng.get_width()
@@ -351,12 +353,41 @@ def algus():
     ärtuK = pygame.image.load('ärtuK.png')
     objekt_suurus_ärtuK = (70, 100)
     objekt_x_ärtuK, objekt_y_ärtuK = 5, 310
+    
+    global tekst1, objekt_x_tekst1, objekt_y_tekst1
+    tekst1 = pygame.image.load('tühi.jpg')
+    objekt_x_tekst1, objekt_y_tekst1 = 100000, 100000
+    
+    #Ärtuässa_copy info
+    global ärtuäss_copy, objekt_x_ärtuäss_copy, objekt_y_ärtuäss_copy, objekt_suurus_ärtuäss_copy
+    ärtuäss_copy = pygame.image.load('ärtuäss.png')
+    objekt_suurus_ärtuäss_copy = (70, 100)
+    objekt_x_ärtuäss_copy, objekt_y_ärtuäss_copy = 5, 310
+    
+    #Potiässa_copy info
+    global potiäss_copy, objekt_x_potiäss_copy, objekt_y_potiäss_copy, objekt_suurus_potiäss_copy
+    potiäss_copy = pygame.image.load('potiäss.png')
+    objekt_suurus_potiäss_copy = (70, 100)
+    objekt_x_potiäss_copy, objekt_y_potiäss_copy = 5, 110
+    
+    #Ristiässa_copy info
+    global ristiäss_copy, objekt_x_ristiäss_copy, objekt_y_ristiäss_copy, objekt_suurus_ristiäss_copy
+    ristiäss_copy = pygame.image.load('potiäss.png')
+    objekt_suurus_ristiäss_copy = (70, 100)
+    objekt_x_ristiäss_copy, objekt_y_ristiäss_copy = 5, 210
+    
+    #Ruutuässa_copy info
+    global ruutuäss_copy, objekt_x_ruutuäss_copy, objekt_y_ruutuäss_copy, objekt_suurus_ruutuäss_copy
+    ruutuäss_copy = pygame.image.load('ruutuäss.png')
+    objekt_suurus_ruutuäss_copy = (70, 100)
+    objekt_x_ruutuäss_copy, objekt_y_ruutuäss_copy = 5, 10
+
 
 #Käivitab funktsiooni
 algus()
 
 #Ekraani paremal poolel on kõik sama masti kaardid mängu alguses genereeritud samasse asukohta. See rida aitab programmil mängu loopis aru saada, milline mast valiti
-rida_äss = ['ärtuäss', 'potiäss', 'ruutuäss', 'ristiäss']
+rida_äss = ['ärtuäss_copy', 'potiäss_copy', 'ruutuäss_copy', 'ristiäss_copy']
 
 #Siin on reana kõik risti masti kaardid.
 rida_risti = ['ristiäss', 'risti2', 'risti3', 'risti4', 'risti5', 'risti6', 'risti7', 'risti8', 'risti9', 'risti10', 'ristiJ', 'ristiQ', 'ristiK']
@@ -557,41 +588,36 @@ def kumb_võidab(kaardid1, kaardid2): #funktsioon mis võtab sisendiks kaks kät
                 return "Teine"
     return "Viik"
 
-def preflop():
-    väljund = {}
-    for i in range(len(kaardipaar)):
-        luger = 0
-        järjend = kaardipaar[i].split()
-        kaart1 = järjend[0]
-        kaart2 = järjend[1]
-        kaardid1 = kaardid.copy()
-        kaardid1.remove(kaart1)
-        kaardid1.remove(kaart2)
-        for k in range(500000):
-            seitse = sample(kaardid1,7)
-            laud = sample(seitse, 5)
-            laud.append(kaart1)
-            laud.append(kaart2)
-            tulemus = kumb_võidab(laud, seitse)
-            if tulemus == "Esimene":
-                luger += 1
-            elif tulemus == "Viik":
-                luger += 0.5
+def preflop(kaart1, kaart2):
+    sisend1 = ""
+    if kaart1[-1] == kaart2[-1]:
+        sisend1 = "y"
+    sisend2 = kaart1
+    sisend3 = kaart2
+    if kaartide_järjestus(sisend2) >= kaartide_järjestus(sisend3):
+        if sisend1 == "y":
+            sisend = sisend3[:-1] + "♥ " + sisend2[:-1] + "♥"
+        else:
+            sisend = sisend3[:-1] + "♣ " + sisend2[:-1] + "♥"
+    else:
+        if sisend1 == "y":
+            sisend = sisend2[:-1] + "♥ " + sisend3[:-1] + "♥"
+        else:
+            sisend = sisend2[:-1] + "♣ " + sisend3[:-1] + "♥"
 
-        väljund[kaardipaar[i]] = luger
-    sorteeritud_väljund = dict(sorted(väljund.items(), key=lambda item: item[1], reverse=True))
-    print(sorteeritud_väljund)
-    return(sorteeritud_väljund)
-
+    sõnastik = {'A♣ A♥': 430922.5, 'K♣ K♥': 415776.0, 'Q♣ Q♥': 402266.5, 'J♣ J♥': 388306.5, '10♣ 10♥': 375936.0, '9♣ 9♥': 360230.5, '8♣ 8♥': 345449.0, 'K♥ A♥': 337107.5, 'Q♥ A♥': 332741.5, '7♣ 7♥': 330745.5, 'K♣ A♥': 328521.0, 'J♥ A♥': 327926.5, '10♥ A♥': 324471.5, 'Q♣ A♥': 323566.5, 'J♣ A♥': 319300.0, 'Q♥ K♥': 317427.5, '9♥ A♥': 316104.5, '10♣ A♥': 315390.0, '6♣ 6♥': 315283.0, 'J♥ K♥': 312513.5, '8♥ A♥': 311815.0, '10♥ K♥': 309312.0, 'Q♣ K♥': 307490.0, '7♥ A♥': 306895.0, '9♣ A♥': 305923.5, 'J♣ K♥': 302472.0, '5♥ A♥': 301942.5, '8♣ A♥': 301826.5, '5♣ 5♥': 301789.0, '6♥ A♥': 301480.5, '9♥ K♥': 300869.0, 'J♥ Q♥': 300757.0, '10♣ K♥': 298591.5, '4♥ A♥': 297964.0, '7♣ A♥': 296124.5, '10♥ Q♥': 295626.5, '8♥ K♥': 293651.5, '3♥ A♥': 293576.5, '6♣ A♥': 290808.0, '9♣ K♥': 290602.5, '5♣ A♥': 290344.5, '2♥ A♥': 290120.5, 'J♣ Q♥': 289428.5, '7♥ K♥': 289425.5, '9♥ Q♥': 288090.0, '4♣ A♥': 286255.5, '4♣ 4♥': 286212.0, '10♣ Q♥': 284946.0, '6♥ K♥': 284901.0, '10♥ J♥': 284512.5, '8♣ K♥': 282482.0, '3♣ A♥': 282091.5, '5♥ K♥': 281208.5, '8♥ Q♥': 280968.0, '7♣ K♥': 278127.5, '2♣ A♥': 277844.5, '9♥ J♥': 277026.5, '4♥ K♥': 276673.5, '9♣ Q♥': 276294.5, '7♥ Q♥': 273589.5, '10♣ J♥': 273153.5, '6♣ K♥': 272713.5, '3♥ K♥': 272323.0, '3♣ 3♥': 270220.0, '6♥ Q♥': 269681.0, '8♥ J♥': 269091.5, '8♣ Q♥': 268833.0, '5♣ K♥': 268812.0, '2♥ K♥': 268751.0, '9♥ 10♥': 266844.0, '5♥ Q♥': 265355.5, '9♣ J♥': 263727.5, '4♣ K♥': 263695.0, '7♥ J♥': 261340.5, '7♣ Q♥': 260927.5, '4♥ Q♥': 260919.0, '3♣ K♥': 259092.5, '8♥ 10♥': 258136.0, '3♥ Q♥': 256904.5, '6♣ Q♥': 256769.5, '8♣ J♥': 256019.5, '2♣ K♥': 255068.0, '2♣ 2♥': 254673.5, '6♥ J♥': 254278.0, '9♣ 10♥': 253525.5, '2♥ Q♥': 253158.5, '5♣ Q♥': 252451.0, '7♥ 10♥': 251468.0, '5♥ J♥': 251399.5, '8♥ 9♥': 249862.0, '7♣ J♥': 248101.5, '4♣ Q♥': 247366.0, '4♥ J♥': 246115.5, '8♣ 10♥': 245582.5, '6♥ 10♥': 244076.5, '7♥ 9♥': 243020.0, '3♥ J♥': 242911.0, '3♣ Q♥': 242459.0, '6♣ J♥': 240680.5, '2♥ J♥': 238511.0, '2♣ Q♥': 238353.0, '7♣ 10♥': 238222.0, '5♥ 10♥': 237730.0, '5♣ J♥': 237198.5, '8♣ 9♥': 235868.0, '6♥ 9♥': 235139.0, '7♥ 8♥': 234578.0, '4♥ 10♥': 233483.0, '4♣ J♥': 232708.0, '6♣ 10♥': 230007.5, '3♥ 10♥': 229723.5, '5♥ 9♥': 228382.5, '3♣ J♥': 227866.0, '7♣ 9♥': 227549.0, '6♥ 8♥': 227528.5, '2♥ 10♥': 225893.0, '2♣ J♥': 222939.0, '5♣ 10♥': 221864.0, '6♥ 7♥': 221229.5, '4♥ 9♥': 220613.0, '6♣ 9♥': 220318.5, '5♥ 8♥': 220286.0, '7♣ 8♥': 219789.5, '4♣ 10♥': 218053.0, '3♥ 9♥': 217235.0, '5♥ 7♥': 214578.5, '3♣ 10♥': 213565.5, '2♥ 9♥': 213524.0, '4♥ 8♥': 213287.0, '6♣ 8♥': 212269.0, '5♣ 9♥': 212154.0, '5♥ 6♥': 210052.0, '2♣ 10♥': 209451.0, '4♥ 7♥': 206826.0, '6♣ 7♥': 206200.0, '3♥ 8♥': 205857.5, '5♣ 8♥': 204812.5, '4♣ 9♥': 204195.5, '4♥ 5♥': 203071.5, '4♥ 6♥': 202770.5, '2♥ 8♥': 202256.5, '3♣ 9♥': 201209.0, '3♥ 7♥': 199747.0, '5♣ 7♥': 198401.0, '4♣ 8♥': 196647.0, '3♥ 5♥': 196199.5, '2♣ 9♥': 196034.5, '3♥ 6♥': 194705.0, '5♣ 6♥': 193612.5, '2♥ 7♥': 192155.5, '3♥ 4♥': 191076.5, '4♣ 7♥': 189811.5, '2♥ 5♥': 188746.5, '3♣ 8♥': 188381.0, '2♥ 6♥': 187436.5, '4♣ 5♥': 186352.5, '4♣ 6♥': 185734.5, '2♣ 8♥': 185169.0, '2♥ 4♥': 183541.5, '3♣ 7♥': 181927.0, '2♥ 3♥': 178923.0, '3♣ 5♥': 178295.0, '3♣ 6♥': 177431.0, '3♣ 4♥': 173662.0, '2♣ 7♥': 173637.5, '2♣ 5♥': 171004.0, '2♣ 6♥': 169295.5, '2♣ 4♥': 165504.0, '2♣ 3♥': 161125.0}
+    võtmed = list(sõnastik.keys())
+    return sõnastik[sisend]/5000
+    
+    
 #Eestikeelesetes sõnastikes uurides leidsin, et kõige sagedasemani kasutatakse eestikeeles ingliskeerlseid väljendeid preflop, flop, turn, river (sellest inspireeritune ka nimed funktsioonidele)
 def flop(a, b, c, d, e):
     luger = 0
-    kaart1 = kaardid[a] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
-    kaart2 = kaardid[b]
-    flop1 = kaardid[c]
-    flop2 = kaardid[d]
-    flop3 = kaardid[e]
-    print(kaart1, kaart2, flop1, flop2, flop3)
+    kaart1 = a#Valime kaartide nimistust suvalised kaardid mis võiks olla laual
+    kaart2 = b
+    flop1 = c
+    flop2 = d
+    flop3 = e
     kaardid1 = kaardid.copy()
     kaardid1.remove(kaart1)
     kaardid1.remove(kaart2)
@@ -608,17 +634,16 @@ def flop(a, b, c, d, e):
             luger += 1
         elif tulemus == "Viik":
             luger += 0.5
-    return luger
+    return luger / 100
 
 def turn(a, b, c, d, e, f):
     luger = 0
-    kaart1 = kaardid[a] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
-    kaart2 = kaardid[b]
-    flop1 = kaardid[c]
-    flop2 = kaardid[d]
-    flop3 = kaardid[e]
-    turn = kaardid[f]
-    print(kaart1, kaart2, flop1, flop2, flop3, turn)
+    kaart1 = a #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
+    kaart2 = b
+    flop1 = c
+    flop2 = d
+    flop3 = e
+    turn = f
     kaardid1 = kaardid.copy()
     kaardid1.remove(kaart1)
     kaardid1.remove(kaart2)
@@ -636,19 +661,18 @@ def turn(a, b, c, d, e, f):
             luger += 1
         elif tulemus == "Viik":
             luger += 0.5
-    return luger
+    return luger / 100
 
 
 def river(a, b, c, d, e, f, g):
     luger = 0
-    kaart1 = kaardid[a] #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
-    kaart2 = kaardid[b]
-    flop1 = kaardid[c]
-    flop2 = kaardid[d]
-    flop3 = kaardid[e]
-    turn = kaardid[f]
-    river = kaardid[g]
-    print(kaart1, kaart2, flop1, flop2, flop3, turn, river)
+    kaart1 = a #Valime kaartide nimistust suvalised kaardid mis võiks olla laual
+    kaart2 = b
+    flop1 = c
+    flop2 = d
+    flop3 = e
+    turn = f
+    river = g
     kaardid1 = kaardid.copy()
     kaardid1.remove(kaart1)
     kaardid1.remove(kaart2)
@@ -666,7 +690,7 @@ def river(a, b, c, d, e, f, g):
             luger += 1
         elif tulemus == "Viik":
             luger += 0.5
-    return luger
+    return luger / 100
 
 ###
 
@@ -684,6 +708,11 @@ mitmes = 0
 
 kaart1 = ''
 kaart2 = ''
+flop1 = ''
+flop2 = ''
+flop3 = ''
+turn1 = ''
+river1 = ''
 programm_käib = True
 while programm_käib:
     
@@ -705,12 +734,22 @@ while programm_käib:
                 kaardid_valitud = False
                 mitmes = 0
                 asukohad = {}
+            
+            #Arvutanupp
             if mitmes == 2 or mitmes == 5 or mitmes == 6 or mitmes == 7:
                 if objekt_x_arvutanupp <= hiir[0] <= objekt_x_arvutanupp + objekt_suurus_arvutanupp[0] and objekt_y_arvutanupp <= hiir[1] <= objekt_y_arvutanupp + objekt_suurus_arvutanupp[1]:
                     if mitmes == 2:
-                        
-                        
-            
+                        tekst1 = font.render(f"Suvalise käe vastu mängides on võidu võimalus: {round(preflop(kaart1, kaart2), 1)}%, ", True, must)
+                        objekt_x_tekst1, objekt_y_tekst1 = 300, 300                       
+                    if mitmes == 5:
+                        tekst1 = font.render(f"Suvalise käe vastu mängides on võidu võimalus: {round(flop(kaart1, kaart2, flop1, flop2, flop3), 1)}%, ", True, must)
+                        objekt_x_tekst1, objekt_y_tekst1 = 300, 300
+                    if mitmes == 6:
+                        tekst1 = font.render(f"Suvalise käe vastu mängides on võidu võimalus: {round(turn(kaart1, kaart2, flop1, flop2, flop3, turn1), 1)}%, ", True, must)
+                        objekt_x_tekst1, objekt_y_tekst1 = 300, 300
+                    if mitmes == 7:
+                        tekst1 = font.render(f"Suvalise käe vastu mängides on võidu võimalus: {round(river(kaart1, kaart2, flop1, flop2, flop3, turn1, river1), 1)}%, ", True, must)
+                        objekt_x_tekst1, objekt_y_tekst1 = 300, 300
             #See programmilõik kontrollib, milline mast on valitud
             for i in rida_äss:
                 if globals()[f'objekt_x_{i}'] <= hiir[0] <= globals()[f'objekt_x_{i}'] + 70 and globals()[f'objekt_y_{i}'] <= hiir[1] <= globals()[f'objekt_y_{i}'] + 100:
@@ -773,7 +812,22 @@ while programm_käib:
                             kaart1 = kaardid[kaart1_index]
                         if mitmes == 2:
                             kaart2_index = rida_kaardid.index(kaart)
-                            kaart2 = kaardid[kaart1_index]
+                            kaart2 = kaardid[kaart2_index]
+                        if mitmes == 3:
+                            flop1_index = rida_kaardid.index(kaart)
+                            flop1 = kaardid[flop1_index]
+                        if mitmes == 4:
+                            flop2_index = rida_kaardid.index(kaart)
+                            flop2 = kaardid[flop2_index]
+                        if mitmes == 5:
+                            flop3_index = rida_kaardid.index(kaart)
+                            flop3 = kaardid[flop3_index]
+                        if mitmes == 6:
+                            turn1_index = rida_kaardid.index(kaart)
+                            turn1 = kaardid[turn1_index]
+                        if mitmes == 7:
+                            river1_index = rida_kaardid.index(kaart)
+                            river1 = kaardid[river1_index]
             #Kuna iga kord kui masti vahetatakse, kutsutakse välja algus(), siis aitab sõnastik meelde jätta millised kaardid on valitud ja transpordib nad nende kohtadele koguaeg tagasi.
             for kaart in rida_kaardid:
                 if kaart in asukohad:
@@ -786,10 +840,14 @@ while programm_käib:
     mäng.blit(restartnupp, (objekt_x_restartnupp, objekt_y_restartnupp, * objekt_suurus_restartnupp))
     mäng.blit(arvutanupp, (objekt_x_arvutanupp, objekt_y_arvutanupp, * objekt_suurus_arvutanupp))
     mäng.blit(taust_kirjale, (objekt_x_taust_kirjale, objekt_y_taust_kirjale, * objekt_suurus_taust_kirjale))
+    mäng.blit(tekst1, (objekt_x_tekst1, objekt_y_tekst1))
     
     #Värskendab iga kaardi asukohta
     for kaart in rida_kaardid:
         mäng.blit(globals()[f'{kaart}'], (globals()[f'objekt_x_{kaart}'], globals()[f'objekt_y_{kaart}'], * globals()[f'objekt_suurus_{kaart}']))
-
+    mäng.blit(ärtuäss_copy, (objekt_x_ärtuäss_copy, objekt_y_ärtuäss_copy, * objekt_suurus_ärtuäss_copy))
+    mäng.blit(ruutuäss_copy, (objekt_x_ruutuäss_copy, objekt_y_ruutuäss_copy, * objekt_suurus_ruutuäss_copy))
+    mäng.blit(ristiäss_copy, (objekt_x_ristiäss_copy, objekt_y_ristiäss_copy, * objekt_suurus_ristiäss_copy))
+    mäng.blit(potiäss_copy, (objekt_x_potiäss_copy, objekt_y_potiäss_copy, * objekt_suurus_potiäss_copy))
     pygame.display.update()
 pygame.quit()
