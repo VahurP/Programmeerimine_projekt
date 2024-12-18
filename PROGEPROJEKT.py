@@ -14,10 +14,6 @@ must = (0, 0, 0)
 taustapilt = pygame.image.load('taustapilt.png')
 taustapilt = pygame.transform.scale(taustapilt, (laius, kõrgus))
 
-#Saad valida nuppudest mitu kaarti tahad sisestada
-kaart2_valik = pygame.image.load('2kaarti.png')
-kaart2_valik = pygame.transform.scale(kaart2_valik, (250, 70))
-
 #Taust kirjale
 taust_kirjale = pygame.image.load('taustaks.png')
 objekt_suurus_taust_kirjale = (700, 500)
@@ -372,7 +368,7 @@ def algus():
     
     #Ristiässa_copy info
     global ristiäss_copy, objekt_x_ristiäss_copy, objekt_y_ristiäss_copy, objekt_suurus_ristiäss_copy
-    ristiäss_copy = pygame.image.load('potiäss.png')
+    ristiäss_copy = pygame.image.load('ristiäss.png')
     objekt_suurus_ristiäss_copy = (70, 100)
     objekt_x_ristiäss_copy, objekt_y_ristiäss_copy = 5, 210
     
@@ -800,7 +796,7 @@ while programm_käib:
                 for kaart in rida_kaardid:
                     
                     #Rohkem kui 7 kaarti ei saa valida ning kui y väärtus on liiga suur, ehk kaardid on juba valitud ning transporditud allapoole, siis ei saa neid allpool aktiveerida
-                    if globals()[f'objekt_x_{kaart}'] <= hiir[0] <= globals()[f'objekt_x_{kaart}'] + 70 and globals()[f'objekt_y_{kaart}'] <= hiir[1] <= globals()[f'objekt_y_{kaart}'] + 100 and mitmes < 7 and globals()[f'objekt_x_{kaart}'] > 100:
+                    if globals()[f'objekt_x_{kaart}'] <= hiir[0] <= globals()[f'objekt_x_{kaart}'] + 70 and globals()[f'objekt_y_{kaart}'] <= hiir[1] <= globals()[f'objekt_y_{kaart}'] + 100 and mitmes < 7 and globals()[f'objekt_y_{kaart}'] < 150:
                         globals()[f'objekt_x_{kaart}'], globals()[f'objekt_y_{kaart}'] = kaardi_koht_vajutades
                         
                         #Lisab sõnastikku kaardi nime ja selle kordinaadid
@@ -841,6 +837,7 @@ while programm_käib:
     mäng.blit(arvutanupp, (objekt_x_arvutanupp, objekt_y_arvutanupp, * objekt_suurus_arvutanupp))
     mäng.blit(taust_kirjale, (objekt_x_taust_kirjale, objekt_y_taust_kirjale, * objekt_suurus_taust_kirjale))
     mäng.blit(tekst1, (objekt_x_tekst1, objekt_y_tekst1))
+    
     
     #Värskendab iga kaardi asukohta
     for kaart in rida_kaardid:
